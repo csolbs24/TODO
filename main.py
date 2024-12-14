@@ -1,3 +1,20 @@
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+from firebase_admin import db
+
+cred = credentials.Certificate('todo-list-cse310-firebase-adminsdk-jmntb-4ad8b50f00.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()  # Create a Firestore client
+
+# Cloud Firestore
+items_ref = db.collection('items')
+items = items_ref.stream()
+for item in items:
+    print(f'{item.id} => {item.to_dict()}')
+
+
 # Tab constant to be used throughout the program
 TAB = " " * 4
 
