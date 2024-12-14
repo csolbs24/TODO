@@ -18,6 +18,10 @@ for item in items:
 # Tab constant to be used throughout the program
 TAB = " " * 4
 
+def write_to_db(todo_list):
+    """Write the given todo list to the database"""
+    db.document("items/user").set({"items": todo_list})
+
 def print_options():
     """Prints a list of options to the command line"""
     print("What action would you like to take?")
@@ -57,6 +61,7 @@ def view_list(todo_list):
 def add_to_list(todo_list):
     item = input("What item would you like to add to your todo list: ")
     todo_list.append(item)
+    write_to_db(todo_list)
     
 def delete_from_list(todo_list):
     index = input("What's the index of the element you're deleting: ")
