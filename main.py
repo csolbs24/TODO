@@ -81,7 +81,7 @@ def edit_list(todo_list):
 
 def delete_everything(todo_list):
     """Make a database request to delete everything in the list"""
-    todo_list = []
+    todo_list.clear()
     write_to_db([])
 
 
@@ -110,7 +110,7 @@ def main():
             case "4":
                 edit_list(todo_list)
             case "5":
-                delete_everything()
+                delete_everything(todo_list)
             case "6":
                 return
             case _:
