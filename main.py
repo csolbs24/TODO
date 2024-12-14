@@ -65,6 +65,7 @@ def add_to_list(todo_list):
 
 
 def delete_from_list(todo_list):
+    view_list(todo_list)
     index = input("What's the index of the element you're deleting: ")
     view_list(todo_list)
     todo_list.pop(int(index) - 1)
@@ -72,6 +73,7 @@ def delete_from_list(todo_list):
 
 
 def edit_list(todo_list):
+    view_list(todo_list)
     index = input("What's the index of the element you're editing: ")
     new_element = input("What are you changing it to: ")
     view_list(todo_list)
