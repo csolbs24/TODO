@@ -52,15 +52,15 @@ def get_user_input():
 def view_list(todo_list):
     index = 1
     for item in todo_list:
-        print(f"{index}: {item}")
+        print(f"{TAB}{index}: {item}")
         index += 1
     print()
 
 
 def add_to_list(todo_list):
     item = input("What item would you like to add to your todo list: ")
-    view_list(todo_list)
     todo_list.append(item)
+    view_list(todo_list)
     write_to_db(todo_list)
 
 
