@@ -10,9 +10,6 @@ db = firestore.client()  # Create a Firestore client
 
 # Cloud Firestore
 items_ref = db.collection('items')
-items = items_ref.stream()
-for item in items:
-    print(f'{item.id} => {item.to_dict()}')
 
 
 # Tab constant to be used throughout the program
@@ -29,7 +26,8 @@ def print_options():
     print(f"{TAB}2. Add Item to List")
     print(f"{TAB}3. Delete Item from List")
     print(f"{TAB}4. Edit Item on List")
-    print(f"{TAB}5. Exit Program")
+    print(f"{TAB}5. Delete Entire List")
+    print(f"{TAB}6. Exit Program")
     print(" ")
     
 
@@ -41,7 +39,8 @@ def get_user_input():
         "2",
         "3",
         "4",
-        "5"
+        "5",
+        "6"
     ]
 
     print_options()
@@ -57,26 +56,47 @@ def view_list(todo_list):
     for item in todo_list:
         print(f"{index}: {item}")
         index += 1
+    print()
 
 def add_to_list(todo_list):
     item = input("What item would you like to add to your todo list: ")
+    view_list(todo_list)
     todo_list.append(item)
     write_to_db(todo_list)
     
 def delete_from_list(todo_list):
     index = input("What's the index of the element you're deleting: ")
+    view_list(todo_list)
     todo_list.pop(int(index) - 1)
+    write_to_db(todo_list)
 
 def edit_list(todo_list):
     index = input("What's the index of the element you're editing: ")
     new_element = input("What are you changing it to: ")
+    view_list(todo_list)
     todo_list[int(index) - 1] = new_element
+    write_to_db(todo_list)
+    
+def delete_everything(todo_list):
+    """Make a database request to delete everything in the list"""
+    todo_list = []
+    write_to_db([])
 
 def main():
-    todo_list = []
+    # Grab the todo items from the database
+    items = items_ref.stream()
+    
+    # Populate the local todo list with the db items
+    todo_list = None
+    for item in items:
+        todo_list = item.to_dict()["items"] # The list is stored as the items property
+    if todo_list is None:
+        todo_list = []
+    
+    # Continually loop until the user exits
     while True:
         option = get_user_input()
-        print(f"option {option}")
+        print()
         match (option):
             case "1":
                 view_list(todo_list)
@@ -87,6 +107,8 @@ def main():
             case "4":
                 edit_list(todo_list)
             case "5":
+                delete_everything()
+            case "6":
                 return
             case _:
                 print("unknown case")
